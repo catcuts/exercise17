@@ -1,8 +1,8 @@
 /*
  * @Author: kael 
  * @Date: 2018-02-01 17:41:25 
- * @Last Modified by: kael
- * @Last Modified time: 2018-02-02 17:46:36
+ * @Last Modified by: catcuts
+ * @Last Modified time: 2018-06-10 07:21:49
  */
 
 module.exports = class PubSub {
@@ -12,20 +12,29 @@ module.exports = class PubSub {
   }
 
   subscribe(type, fn) {
-    let listeners = this.subscribers[type] = this.subscribers[type] || [];
-    listeners.push(fn);
+    // todo subscribe
+    if (!this.subscribers[type]) {
+      this.subscribers[type] = [fn];
+    } else {
+      this.subscribers[type].push(fn);
+    }
   }
 
   unsubscribe(type, fn) {
-    let listeners = this.subscribers[type];
-    if (!listeners) return;
-    this.subscribers[type] = listeners.filter(listener => listener !== fn);
+    // todo unsubscribe
+    var fns = this.subscribers[type];
+    var fn_index = fns.indexOf(fn);
+    if (fn_index !== -1) {
+      fns.splice(fn_index, 1);
+    }
   }
 
   publish(type, ...args) {
-    let listeners = this.subscribers[type];
-    if (!listeners) return;
-    listeners.forEach(listener => listener(...args));
+    // todo publish
+    var fns = this.subscribers[type];
+    for (let i = 0; i < fns.length; i++) {
+      fns[i](...args);
+    }
   }
 
 }
